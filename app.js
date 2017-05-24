@@ -90,12 +90,16 @@ watcher.on('add', function(path) {
                         test_pos = sections.indexOf('ItemID') >= 0 ? sections.indexOf('ItemID') : test_pos;
                         sample_pos = sections.indexOf('SampleID') >= 0 ? sections.indexOf('SampleID') : sample_pos;
                         result_pos = sections.indexOf('TestResult') >= 0 ? sections.indexOf('TestResult') : result_pos;
-                    }else if (sections[test_pos]){
+                    }else if (sections[test_pos] && map[sections[test_pos]]){
 
-                        if(mapping[map[sections[test_pos]].toUpperCase()]) {
-                            var measure_name = mapping[map[sections[test_pos]].toUpperCase()];
-                        }else{
-                            var measure_name = map[sections[test_pos]].toUpperCase();
+                        try {
+                            if (mapping[map[sections[test_pos]].toUpperCase()]) {
+                                var measure_name = mapping[map[sections[test_pos]].toUpperCase()];
+                            } else {
+                                var measure_name = map[sections[test_pos]].toUpperCase();
+                            }
+                        }catch(e){
+                            measure_name = '-1';
                         }
 
                         var sample_id = sections[sample_pos];
