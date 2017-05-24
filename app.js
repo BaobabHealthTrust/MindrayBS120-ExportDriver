@@ -93,7 +93,7 @@ watcher.on('add', function(path) {
                     }else if (sections[test_pos] && map[sections[test_pos]]){
 
                         try {
-                            if (mapping[map[sections[test_pos]].toUpperCase()]) {
+                            if (map[sections[test_pos]] && mapping[map[sections[test_pos]].toUpperCase()]) {
                                 var measure_name = mapping[map[sections[test_pos]].toUpperCase()];
                             } else {
                                 var measure_name = map[sections[test_pos]].toUpperCase();
