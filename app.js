@@ -16,6 +16,8 @@ var async = require('async');
 
 var settings = require(__path__.resolve('.', 'config', 'settings'));
 var mapping = require(__path__.resolve('.', 'config',settings.instrumentJSONMapping));
+var map = require(__path__.resolve('.', 'config', 'definitions'));
+
 var target = settings.targetFolder;
 var deleteWhenDone = settings.deleteWhenDone;
 var options_auth = {user: settings.lisUser, password: settings.lisPassword};
@@ -53,8 +55,8 @@ watcher.on('add', function(path) {
             var filename = root;
 
             var mode = ''; //MAP | RESULT
-            var map = {}, id_pos = null, name_pos = null;
-            var map = {}, test_pos = null, sample_pos = null, result_pos;
+            var id_pos = null, name_pos = null;
+            var test_pos = null, sample_pos = null, result_pos;
 
             console.log("New file added " + path);
 
@@ -74,24 +76,24 @@ watcher.on('add', function(path) {
                 }else if (sections[0].match(/\#/)){
                     mode = '';
                 }
-
-                if (mode == 'MAP' && sections.length > 2){
-
-                    if ((id_pos == null)) {
-                        id_pos = sections.indexOf('ID') >= 0 ? sections.indexOf('ID') : id_pos;
-                        name_pos = sections.indexOf('Name') >= 0 ? sections.indexOf('Name') : name_pos;
-                    }else if (sections[id_pos]){
-                        map[sections[id_pos]] = sections[name_pos];
-                    }
+                if (mode == 'MAP' && sections.length > 2) {
+                    /*
+                     if ((id_pos == null)) {
+                     id_pos = sections.indexOf('ID') >= 0 ? sections.indexOf('ID') : id_pos;
+                     name_pos = sections.indexOf('Name') >= 0 ? sections.indexOf('Name') : name_pos;
+                     }else if (sections[id_pos]){
+                     map[sections[id_pos]] = sections[name_pos];
+                     }
+                     */
                 }
 
-                if(mode == 'RESULT' && sections.length > 5 && map != {} > 0){
+                if(mode == 'RESULT' && sections.length > 5){
                     if ((test_pos == null)) {
                         test_pos = sections.indexOf('ItemID') >= 0 ? sections.indexOf('ItemID') : test_pos;
                         sample_pos = sections.indexOf('SampleID') >= 0 ? sections.indexOf('SampleID') : sample_pos;
                         result_pos = sections.indexOf('TestResult') >= 0 ? sections.indexOf('TestResult') : result_pos;
                     }else if (sections[test_pos] && map[sections[test_pos]]){
-
+                        console.log(map[sections[test_pos]]);
                         try {
                             if (map[sections[test_pos]] && mapping[map[sections[test_pos]].toUpperCase()]) {
                                 var measure_name = mapping[map[sections[test_pos]].toUpperCase()];
